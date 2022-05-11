@@ -260,15 +260,50 @@ import el2_pkg::*;
                           .result_x          ( mul_result_x[31:0]                                        ));  // O
 
 
-
-   el2_exu_div_ctl #(.pt(pt)) i_div   (.*,
-                          .cancel            ( dec_div_cancel              ),   // I
-                          .dp                ( div_p                       ),   // I
-                          .dividend          ( muldiv_rs1_d[31:0]          ),   // I
-                          .divisor           ( i0_rs2_d[31:0]              ),   // I
-                          .finish_dly        ( exu_div_wren                ),   // O
-                          .out               ( exu_div_result[31:0]        ));  // O
-
+   `ifdef RV_EXU_NOC
+       localparam MESH_HEIGHT = 1;
+       localparam MESH_WIDTH = 1;
+       
+       node_port north_up[MESH_WIDTH]();
+       node_port north_down[MESH_WIDTH]();
+       
+       node_port south_up[MESH_WIDTH]();
+       node_port south_down[MESH_WIDTH]();
+       
+       node_port east_up[MESH_HEIGHT]();
+       node_port east_down[MESH_HEIGHT]();
+       
+       node_port west_up[MESH_HEIGHT]();
+       node_port west_down[MESH_HEIGHT]();
+   
+       mesh #(.MESH_HEIGHT(MESH_HEIGHT), .MESH_WIDTH(MESH_WIDTH)) i_mesh (.*);
+       
+       el2_exu_div_receiver i_div_r (.*,
+                              .down              ( `I_DIV_RCV                  ),   // I
+                              
+                              .finish_dly        ( exu_div_wren                ),   // O
+                              .out               ( exu_div_result[31:0]        ));  // O
+                              
+       el2_exu_div_sender i_div_s (.*,
+                              .up                ( `I_DIV_SND                  ),   // O
+                              
+                              .cancel            ( dec_div_cancel              ),   // I
+                              .dp                ( div_p                       ),   // I
+                              .dividend          ( muldiv_rs1_d[31:0]          ),   // I
+                              .divisor           ( i0_rs2_d[31:0]              ));  // I
+                              
+       el2_exu_div_wrapper #(.pt(pt)) i_div_wrapper (.*,
+                              .up                ( `I_DIV_WR_UP                ),   // O
+                              .down              ( `I_DIV_WR_DOWN              ));  // I
+   `else // `RV_EXU_NOC
+       el2_exu_div_ctl #(.pt(pt)) i_div   (.*,
+                              .cancel            ( dec_div_cancel              ),   // I
+                              .dp                ( div_p                       ),   // I
+                              .dividend          ( muldiv_rs1_d[31:0]          ),   // I
+                              .divisor           ( i0_rs2_d[31:0]              ),   // I
+                              .finish_dly        ( exu_div_wren                ),   // O
+                              .out               ( exu_div_result[31:0]        ));  // O
+   `endif // `RV_EXU_NOC
 
 
    assign exu_i0_result_x[31:0]    =  (mul_valid_x)  ?  mul_result_x[31:0]  :  alu_result_x[31:0];
