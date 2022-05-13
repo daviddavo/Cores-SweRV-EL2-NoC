@@ -25,11 +25,12 @@ import noc_functions::build_header;
 (
    node_port.up          up,                        // To NoC input
   
-   input logic           clk,                       // RISC-V NoC
    input logic           clk_noc,                   // Exu NoC clock
    input logic           rst_l,                     // Reset
+   
+   input logic           noc_sr_flush,              // Allows sending new data
 
-   input el2_div_pkt_t   dp,                         // valid, sign, rem
+   input el2_div_pkt_t   dp,                        // valid, sign, rem
    input logic  [31:0]   dividend,                  // Numerator
    input logic  [31:0]   divisor,                   // Denominator
 
@@ -46,7 +47,7 @@ import noc_functions::build_header;
     .rst      ( ~rst_l                ),
     .dst_addr ( `POS_DIV_WRAPPER      ),
     .enable   ( dp.valid              ),
-    .flush    ( flush                 ),
+    .flush    ( noc_sr_flush          ),
     .padding  ( { dp, cancel }        ),
     .packet   ( { dividend, divisor } ),
     .ack      (                       ),

@@ -29,6 +29,8 @@ import noc_types::*;
   
    input logic           clk_noc,                   // NoC clock
    input logic           rst_l,                     // Reset
+   
+   input logic           noc_sr_flush,              // Allows sending new data
 
    output logic          finish_dly,                // Finish to match data
    output logic [31:0]   out                        // Result
@@ -39,11 +41,11 @@ import noc_types::*;
   noc_serial_receiver #(
     .PACKET_BITS($bits(out))
   ) i_receiver (
-    .clk     ( clk_noc ),
-    .rst     ( ~rst_l  ),
-    .flush   ( flush   ), // TODO: Use flush for smth
-    .down    ( down    ),
-    .valid   ( valid   ),
-    .padding (         ),
-    .packet  ( out     ));
+    .clk     ( clk_noc        ),
+    .rst     ( ~rst_l         ),
+    .flush   ( noc_sr_flush   ), // TODO: Use flush for smth
+    .down    ( down           ),
+    .valid   ( valid          ),
+    .padding (                ),
+    .packet  ( out            ));
 endmodule

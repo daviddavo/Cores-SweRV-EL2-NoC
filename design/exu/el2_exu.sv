@@ -21,6 +21,7 @@ import el2_pkg::*;
 )
   (
    input logic          clk,                                           // Top level clock
+   input logic          clk_noc,                                       // Clock for the NoC
    input logic          rst_l,                                         // Reset
    input logic          scan_mode,                                     // Scan control
 
@@ -264,6 +265,8 @@ import el2_pkg::*;
        localparam MESH_HEIGHT = 1;
        localparam MESH_WIDTH = 1;
        
+       logic noc_sr_flush; // Flush senders and receivers
+       
        node_port north_up[MESH_WIDTH]();
        node_port north_down[MESH_WIDTH]();
        
@@ -275,6 +278,11 @@ import el2_pkg::*;
        
        node_port west_up[MESH_HEIGHT]();
        node_port west_down[MESH_HEIGHT]();
+       
+       edge_detector ed (
+                              .clk_slow ( clk           ),   // I
+                              .clk_fast ( clk_exu_noc   ),   // I
+                              .rising   ( noc_sr_flush  ));  // O
    
        mesh #(.MESH_HEIGHT(MESH_HEIGHT), .MESH_WIDTH(MESH_WIDTH)) i_mesh (.*);
        

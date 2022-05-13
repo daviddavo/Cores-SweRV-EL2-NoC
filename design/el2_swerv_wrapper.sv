@@ -678,6 +678,23 @@ import el2_pkg::*;
 
 `endif //  `ifdef RV_BUILD_AHB_LITE
 
+`ifdef RV_EXU_NOC
+    logic clk_exu_noc, clk_swerv;
+
+    clk_wiz_0 clk_multiplier (
+        // Clock out ports
+        .clk_swerv(clk_swerv),     // output clk_swerv
+        .clk_exu_noc(clk_exu_noc),     // output clk_exu_noc
+        // Status and control signals
+        .resetn(rst_l), // input resetn
+       // Clock in ports
+        .clk(clk)
+    );      // input clk
+`else
+    logic clk_swerv;
+    assign clk_swerv = clk;
+`endif //  `ifdeg RV_EXU_NOC
+
    logic                   dmi_reg_en;
    logic [6:0]             dmi_reg_addr;
    logic                   dmi_reg_wr_en;
@@ -686,7 +703,7 @@ import el2_pkg::*;
 
    // Instantiate the el2_swerv core
    el2_swerv #(.pt(pt)) swerv (
-                                .clk(clk),
+                                .clk(clk_swerv),
                                 .*
                                 );
 
@@ -709,7 +726,7 @@ import el2_pkg::*;
     .tdoEnable   (),
     // Processor Signals
     .core_rst_n  (dbg_rst_l),       // Debug reset, active low
-    .core_clk    (clk),             // Core clock
+    .core_clk    (clk_swerv),             // Core clock
     .jtag_id     (jtag_id),         // JTAG ID
     .rd_data     (dmi_reg_rdata),   // Read data from  Processor
     .reg_wr_data (dmi_reg_wdata),   // Write data to Processor

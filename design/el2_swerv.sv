@@ -27,6 +27,7 @@ import el2_pkg::*;
  )
   (
    input logic                  clk,
+   input logic                  clk_exu_noc,
    input logic                  rst_l,
    input logic                  dbg_rst_l,
    input logic [31:1]           rst_vec,
@@ -887,6 +888,7 @@ import el2_pkg::*;
 
    el2_exu #(.pt(pt)) exu (
                             .clk(active_l2clk),
+                            .clk_noc(clk_exu_noc),
                             .rst_l(core_rst_l),
                             .*
                             );
