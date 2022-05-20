@@ -253,17 +253,9 @@ import el2_pkg::*;
                           .pc_ff             ( exu_i0_pc_x[31:1]           ));  // O
 
 
-
-   el2_exu_mul_ctl #(.pt(pt)) i_mul   (.*,
-                          .mul_p             ( mul_p              & {$bits(el2_mul_pkt_t){mul_p.valid}} ),   // I
-                          .rs1_in            ( muldiv_rs1_d[31:0] & {32{mul_p.valid}}                    ),   // I
-                          .rs2_in            ( i0_rs2_d[31:0]     & {32{mul_p.valid}}                    ),   // I
-                          .result_x          ( mul_result_x[31:0]                                        ));  // O
-
-
    `ifdef RV_EXU_NOC
-       localparam MESH_HEIGHT = 1;
-       localparam MESH_WIDTH = 1;
+       localparam MESH_HEIGHT = `EXU_NOC_HEIGHT;
+       localparam MESH_WIDTH =  `EXU_NOC_WIDTH;
        
        logic noc_sr_flush; // Flush senders and receivers
        
@@ -305,6 +297,21 @@ import el2_pkg::*;
        el2_exu_div_wrapper #(.pt(pt)) i_div_wrapper (.*,
                               .up                ( `I_DIV_WR_UP                ),   // O
                               .down              ( `I_DIV_WR_DOWN              ));  // I
+                              
+       el2_exu_mul_sender i_mul_s (.*,
+                              .up                ( `I_MUL_SND                  ),   // O
+                              
+                              .mul_p             ( mul_p & {$bits(el2_mul_pkt_t){mul_p.valid}}               ),  // I
+                              .rs1_in            ( muldiv_rs1_d[31:0] & {32{mul_p.valid}}                    ),   // I
+                              .rs2_in            ( i0_rs2_d[31:0]     & {32{mul_p.valid}}                    ));  // I
+                              
+       el2_exu_mul_receiver i_mul_r (.*,
+                              .down              ( `I_MUL_RCV                  ),  //  I
+                              .result_x          ( mul_result_x[31:0]          )); //  O
+                              
+       el2_exu_mul_wrapper #(.pt(pt)) i_mul_wrapper (.*,
+                              .up                ( `I_MUL_WR_UP                ),   // O
+                              .down              ( `I_MUL_WR_DOWN              ));  // I
    `else // `RV_EXU_NOC
        el2_exu_div_ctl #(.pt(pt)) i_div   (.*,
                               .cancel            ( dec_div_cancel              ),   // I
@@ -313,6 +320,12 @@ import el2_pkg::*;
                               .divisor           ( i0_rs2_d[31:0]              ),   // I
                               .finish_dly        ( exu_div_wren                ),   // O
                               .out               ( exu_div_result[31:0]        ));  // O
+                              
+       el2_exu_mul_ctl #(.pt(pt)) i_mul   (.*,
+                              .mul_p             ( mul_p              & {$bits(el2_mul_pkt_t){mul_p.valid}} ),   // I
+                              .rs1_in            ( muldiv_rs1_d[31:0] & {32{mul_p.valid}}                    ),   // I
+                              .rs2_in            ( i0_rs2_d[31:0]     & {32{mul_p.valid}}                    ),   // I
+                              .result_x          ( mul_result_x[31:0]                                        ));  // O
    `endif // `RV_EXU_NOC
 
 

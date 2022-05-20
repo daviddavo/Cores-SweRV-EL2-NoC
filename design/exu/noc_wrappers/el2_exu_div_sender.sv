@@ -21,7 +21,6 @@
 module el2_exu_div_sender
 import el2_pkg::*;
 import noc_types::*;
-import noc_functions::build_header;
 (
    node_port.up          up,                        // To NoC input
   
