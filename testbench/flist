@@ -2,6 +2,17 @@
 //-y $SYNOPSYS_SYN_ROOT/dw/sim_ver
 +define+RV_OPENSOURCE
 +incdir+$RV_ROOT/testbench
+
+$RV_ROOT/../poc_noc/src/include/noc_types.sv
+$RV_ROOT/../poc_noc/src/include/noc_functions.sv
+$RV_ROOT/../poc_noc/src/interfaces/node_port.sv
+$RV_ROOT/../poc_noc/src/node_link.sv
+$RV_ROOT/../poc_noc/src/crossbar_rr.sv
+$RV_ROOT/../poc_noc/src/node.sv
+$RV_ROOT/../poc_noc/src/mesh.sv
+$RV_ROOT/../poc_noc/src/utils/noc_serial_receiver.sv
+$RV_ROOT/../poc_noc/src/utils/noc_serial_sender.sv
+
 $RV_ROOT/design/el2_swerv_wrapper.sv
 $RV_ROOT/design/el2_mem.sv
 $RV_ROOT/design/el2_pic_ctrl.sv
@@ -21,6 +32,9 @@ $RV_ROOT/design/dec/el2_dec_ib_ctl.sv
 $RV_ROOT/design/dec/el2_dec_tlu_ctl.sv
 $RV_ROOT/design/dec/el2_dec_trigger.sv
 $RV_ROOT/design/dec/el2_dec.sv
+$RV_ROOT/design/exu/noc_wrappers/el2_exu_div_receiver.sv
+$RV_ROOT/design/exu/noc_wrappers/el2_exu_div_sender.sv
+$RV_ROOT/design/exu/noc_wrappers/el2_exu_div_wrapper.sv
 $RV_ROOT/design/exu/el2_exu_alu_ctl.sv
 $RV_ROOT/design/exu/el2_exu_mul_ctl.sv
 $RV_ROOT/design/exu/el2_exu_div_ctl.sv

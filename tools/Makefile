@@ -37,6 +37,7 @@ VERILATOR = verilator
 RIVIERA = riviera
 GCC_PREFIX = riscv64-unknown-elf
 BUILD_DIR = snapshots/${snapshot}
+NOC_DIR = ${RV_ROOT}/../poc_noc/
 TBDIR = ${RV_ROOT}/testbench
 
 # Define test name
@@ -77,6 +78,8 @@ TBFILES = $(TBDIR)/tb_top.sv $(TBDIR)/ahb_sif.sv
 defines  = $(BUILD_DIR)/common_defines.vh
 defines += ${RV_ROOT}/design/include/el2_def.sv
 defines += $(BUILD_DIR)/el2_pdef.vh
+defines += $(BUILD_DIR)/noc_defines.vh
+defines += $(NOC_DIR)/src/include/common_defines.vh
 includes = -I${BUILD_DIR}
 
 # CFLAGS for verilator generated Makefiles. Without -std=c++11 it

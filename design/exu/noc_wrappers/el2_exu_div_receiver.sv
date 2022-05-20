@@ -36,6 +36,8 @@ import noc_types::*;
    output logic [31:0]   out                        // Result
   );
   
+  logic valid;
+  
   assign finish_dly = valid; 
   
   noc_serial_receiver #(

@@ -21,6 +21,7 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
+#define CLK_MUL 16
 
 vluint64_t main_time = 0;
 
@@ -51,7 +52,8 @@ int main(int argc, char** argv) {
       tfp->dump (main_time);
 #endif
       main_time += 5;
-      tb->core_clk = !tb->core_clk;
+      tb->noc_clk = !tb->noc_clk;
+      if (main_time % (CLK_MUL * 5) == 0) tb->core_clk = !tb->core_clk;
       tb->eval();
   }
 

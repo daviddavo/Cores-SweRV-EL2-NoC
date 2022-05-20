@@ -281,10 +281,12 @@ import el2_pkg::*;
        
        edge_detector ed (
                               .clk_slow ( clk           ),   // I
-                              .clk_fast ( clk_exu_noc   ),   // I
+                              .clk_fast ( clk_noc       ),   // I
                               .rising   ( noc_sr_flush  ));  // O
    
-       mesh #(.MESH_HEIGHT(MESH_HEIGHT), .MESH_WIDTH(MESH_WIDTH)) i_mesh (.*);
+       mesh #(.MESH_HEIGHT(MESH_HEIGHT), .MESH_WIDTH(MESH_WIDTH)) i_mesh (.*,
+                              .clk ( clk_noc     ),
+                              .rst ( ~rst_l      ));
        
        el2_exu_div_receiver i_div_r (.*,
                               .down              ( `I_DIV_RCV                  ),   // I

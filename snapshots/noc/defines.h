@@ -174,3 +174,4 @@
 #define RV_PIC_SIZE 32
 #define RV_PIC_MEIPT_MASK 0x0
 #define RV_PIC_TOTAL_INT 31
+#define RV_EXU_NOC

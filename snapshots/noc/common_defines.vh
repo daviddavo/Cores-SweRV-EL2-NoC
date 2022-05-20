@@ -245,3 +245,4 @@
 `define RV_PIC_MEIPT_MASK 'h0
 `define RV_PIC_TOTAL_INT 31
 `undef RV_ASSERT_ON
+`define RV_EXU_NOC

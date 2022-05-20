@@ -27,15 +27,18 @@ import el2_pkg::*;
 `include "el2_param.vh"   
 )
   (
-   node_port.down down,     // From NoC output
-   node_port.up   up,       // To NoC output
+   node_port.down down,           // From NoC output
+   node_port.up   up,             // To NoC output
    
-   input logic    clk,      // Top level clock
-   input logic    clk_noc,  // Exu NoC clock
-   input logic    rst_l     // Reset
+   input logic    clk,            // Top level clock
+   input logic    clk_noc,        // Exu NoC clock
+   input logic    rst_l,          // Reset
+   input logic    noc_sr_flush,   // Flush
+   input logic    scan_mode       // scan mode
   );
   
   wire [31:0] dividend, divisor, out;
+  wire div_cancel;
   wire el2_div_pkt_t div_p;
   
   // TODO: Whats scan_mode??
@@ -53,7 +56,7 @@ import el2_pkg::*;
   ) i_receiver (
     .clk      ( clk_noc             ),
     .rst      ( ~rst_l              ),
-    .flush    ( flush               ), // TODO: When do we flush??
+    .flush    ( noc_sr_flush        ),
     .down     ( down                ),
     .valid    ( valid               ), // TODO: Use valid for smth
     .padding  ( {div_p, div_cancel} ),
@@ -64,6 +67,7 @@ import el2_pkg::*;
   ) i_sender (
     .clk       ( clk_noc        ),
     .rst       ( ~rst_l         ),
+    .flush     ( noc_sr_flush   ),
     .enable    ( finish_dly     ),
     .dst_addr  ( `POS_DIV_RCV   ),
     .padding   (                ),

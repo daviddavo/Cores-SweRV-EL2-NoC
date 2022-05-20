@@ -16,11 +16,12 @@
 `ifndef VERILATOR
 module tb_top;
 `else
-module tb_top ( input bit core_clk );
+module tb_top ( input bit core_clk, input bit noc_clk );
 `endif
 
 `ifndef VERILATOR
     bit                         core_clk;
+    bit                         noc_clk;
 `endif
     logic                       rst_l;
     logic                       porst_l;
@@ -376,8 +377,11 @@ module tb_top ( input bit core_clk );
         end
     end
 
+`ifndef VERILATOR
+    always #(5.0/32.0) noc_clk = ~noc_clk;
+`endif
 
-    initial begin
+    initial begin    
         abi_reg[0] = "zero";
         abi_reg[1] = "ra";
         abi_reg[2] = "sp";
@@ -445,6 +449,7 @@ el2_swerv_wrapper rvtop (
     .rst_l                  ( rst_l         ),
     .dbg_rst_l              ( porst_l       ),
     .clk                    ( core_clk      ),
+    .clk_exu_noc            ( noc_clk       ),
     .rst_vec                ( reset_vector[31:1]),
     .nmi_int                ( nmi_int       ),
     .nmi_vec                ( nmi_vector[31:1]),
