@@ -27,7 +27,9 @@ import el2_pkg::*;
  )
   (
    input logic                  clk,
+`ifdef RV_EXU_NOC
    input logic                  clk_exu_noc,
+`endif
    input logic                  rst_l,
    input logic                  dbg_rst_l,
    input logic [31:1]           rst_vec,

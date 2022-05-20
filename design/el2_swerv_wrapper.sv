@@ -27,6 +27,7 @@ import el2_pkg::*;
 )
 (
    input logic                             clk,
+   input logic                             clk_exu_noc,
    input logic                             rst_l,
    input logic                             dbg_rst_l,
    input logic [31:1]                      rst_vec,
@@ -678,22 +679,8 @@ import el2_pkg::*;
 
 `endif //  `ifdef RV_BUILD_AHB_LITE
 
-`ifdef RV_EXU_NOC
-    logic clk_exu_noc, clk_swerv;
-
-    clk_wiz_0 clk_multiplier (
-        // Clock out ports
-        .clk_swerv(clk_swerv),     // output clk_swerv
-        .clk_exu_noc(clk_exu_noc),     // output clk_exu_noc
-        // Status and control signals
-        .resetn(rst_l), // input resetn
-       // Clock in ports
-        .clk(clk)
-    );      // input clk
-`else
     logic clk_swerv;
     assign clk_swerv = clk;
-`endif //  `ifdeg RV_EXU_NOC
 
    logic                   dmi_reg_en;
    logic [6:0]             dmi_reg_addr;
