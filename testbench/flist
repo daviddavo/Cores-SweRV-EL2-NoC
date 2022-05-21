@@ -38,6 +38,9 @@ $RV_ROOT/design/exu/noc_wrappers/el2_exu_div_wrapper.sv
 $RV_ROOT/design/exu/noc_wrappers/el2_exu_mul_receiver.sv
 $RV_ROOT/design/exu/noc_wrappers/el2_exu_mul_sender.sv
 $RV_ROOT/design/exu/noc_wrappers/el2_exu_mul_wrapper.sv
+$RV_ROOT/design/exu/noc_wrappers/el2_exu_alu_receiver.sv
+$RV_ROOT/design/exu/noc_wrappers/el2_exu_alu_sender.sv
+$RV_ROOT/design/exu/noc_wrappers/el2_exu_alu_wrapper.sv
 $RV_ROOT/design/exu/el2_exu_alu_ctl.sv
 $RV_ROOT/design/exu/el2_exu_mul_ctl.sv
 $RV_ROOT/design/exu/el2_exu_div_ctl.sv

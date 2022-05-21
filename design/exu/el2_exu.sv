@@ -228,31 +228,6 @@ import el2_pkg::*;
    assign x_ctl_en                 =  dec_ctl_en[1];
    assign r_ctl_en                 =  dec_ctl_en[0];
 
-
-
-
-   el2_exu_alu_ctl #(.pt(pt)) i_alu  (.*,
-                          .enable            ( x_data_en                   ),   // I
-                          .pp_in             ( i0_predict_newp_d           ),   // I
-                          .valid_in          ( dec_i0_alu_decode_d         ),   // I
-                          .flush_upper_x     ( i0_flush_upper_x            ),   // I
-                          .flush_lower_r     ( dec_tlu_flush_lower_r       ),   // I
-                          .a_in              ( i0_rs1_d[31:0]              ),   // I
-                          .b_in              ( i0_rs2_d[31:0]              ),   // I
-                          .pc_in             ( dec_i0_pc_d[31:1]           ),   // I
-                          .brimm_in          ( dec_i0_br_immed_d[12:1]     ),   // I
-                          .ap                ( i0_ap                       ),   // I
-                          .csr_ren_in        ( dec_csr_ren_d               ),   // I
-                          .csr_rddata_in     ( dec_csr_rddata_d[31:0]      ),   // I
-                          .result_ff         ( alu_result_x[31:0]          ),   // O
-                          .flush_upper_out   ( i0_flush_upper_d            ),   // O
-                          .flush_final_out   ( exu_flush_final             ),   // O
-                          .flush_path_out    ( i0_flush_path_d[31:1]       ),   // O
-                          .predict_p_out     ( i0_predict_p_d              ),   // O
-                          .pred_correct_out  ( i0_pred_correct_upper_d     ),   // O
-                          .pc_ff             ( exu_i0_pc_x[31:1]           ));  // O
-
-
    `ifdef RV_EXU_NOC
        localparam MESH_HEIGHT = `EXU_NOC_HEIGHT;
        localparam MESH_WIDTH =  `EXU_NOC_WIDTH;
@@ -279,6 +254,40 @@ import el2_pkg::*;
        mesh #(.MESH_HEIGHT(MESH_HEIGHT), .MESH_WIDTH(MESH_WIDTH)) i_mesh (.*,
                               .clk ( clk_noc     ),
                               .rst ( ~rst_l      ));
+                              
+       el2_exu_alu_sender   i_alu_s (.*,
+                              .up0               ( `I_ALU_SND0                 ),   // O
+                              .up1               ( `I_ALU_SND1                 ),   // O
+                              
+                              .enable            ( x_data_en                   ),   // I
+                              .pp_in             ( i0_predict_newp_d           ),   // I
+                              .valid_in          ( dec_i0_alu_decode_d         ),   // I
+                              .flush_upper_x     ( i0_flush_upper_x            ),   // I
+                              .flush_lower_r     ( dec_tlu_flush_lower_r       ),   // I
+                              .a_in              ( i0_rs1_d[31:0]              ),   // I
+                              .b_in              ( i0_rs2_d[31:0]              ),   // I
+                              .pc_in             ( dec_i0_pc_d[31:1]           ),   // I
+                              .brimm_in          ( dec_i0_br_immed_d[12:1]     ),   // I
+                              .ap                ( i0_ap                       ),   // I
+                              .csr_ren_in        ( dec_csr_ren_d               ),   // I
+                              .csr_rddata_in     ( dec_csr_rddata_d[31:0]      ));  // I
+                              
+       el2_exu_alu_receiver i_alu_r (.*,
+                              .down              ( `I_ALU_RCV                  ),   // I
+                              
+                              .result_ff         ( alu_result_x[31:0]          ),   // O
+                              .flush_upper_out   ( i0_flush_upper_d            ),   // O
+                              .flush_final_out   ( exu_flush_final             ),   // O
+                              .flush_path_out    ( i0_flush_path_d[31:1]       ),   // O
+                              .predict_p_out     ( i0_predict_p_d              ),   // O
+                              .pred_correct_out  ( i0_pred_correct_upper_d     ),   // O
+                              .pc_ff             ( exu_i0_pc_x[31:1]           ));  // O
+                              
+                              
+       el2_exu_alu_wrapper #(.pt(pt)) i_alu_wrapper (.*,
+                              .up                ( `I_ALU_WR_UP                ),   // O
+                              .down0             ( `I_ALU_WR_DOWN0             ),   // I
+                              .down1             ( `I_ALU_WR_DOWN1             ));  // I
        
        el2_exu_div_receiver i_div_r (.*,
                               .down              ( `I_DIV_RCV                  ),   // I
@@ -326,6 +335,27 @@ import el2_pkg::*;
                               .rs1_in            ( muldiv_rs1_d[31:0] & {32{mul_p.valid}}                    ),   // I
                               .rs2_in            ( i0_rs2_d[31:0]     & {32{mul_p.valid}}                    ),   // I
                               .result_x          ( mul_result_x[31:0]                                        ));  // O
+                              
+       el2_exu_alu_ctl #(.pt(pt)) i_alu  (.*,
+                              .enable            ( x_data_en                   ),   // I
+                              .pp_in             ( i0_predict_newp_d           ),   // I
+                              .valid_in          ( dec_i0_alu_decode_d         ),   // I
+                              .flush_upper_x     ( i0_flush_upper_x            ),   // I
+                              .flush_lower_r     ( dec_tlu_flush_lower_r       ),   // I
+                              .a_in              ( i0_rs1_d[31:0]              ),   // I
+                              .b_in              ( i0_rs2_d[31:0]              ),   // I
+                              .pc_in             ( dec_i0_pc_d[31:1]           ),   // I
+                              .brimm_in          ( dec_i0_br_immed_d[12:1]     ),   // I
+                              .ap                ( i0_ap                       ),   // I
+                              .csr_ren_in        ( dec_csr_ren_d               ),   // I
+                              .csr_rddata_in     ( dec_csr_rddata_d[31:0]      ),   // I
+                              .result_ff         ( alu_result_x[31:0]          ),   // O
+                              .flush_upper_out   ( i0_flush_upper_d            ),   // O
+                              .flush_final_out   ( exu_flush_final             ),   // O
+                              .flush_path_out    ( i0_flush_path_d[31:1]       ),   // O
+                              .predict_p_out     ( i0_predict_p_d              ),   // O
+                              .pred_correct_out  ( i0_pred_correct_upper_d     ),   // O
+                              .pc_ff             ( exu_i0_pc_x[31:1]           ));  // O
    `endif // `RV_EXU_NOC
 
 
