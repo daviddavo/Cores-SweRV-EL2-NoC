@@ -35,18 +35,18 @@ add wave -noupdate /tb_top/rvtop/swerv/exu/i_mul_wrapper/i_receiver/nextstate
 add wave -noupdate /tb_top/rvtop/swerv/exu/i_mul_wrapper/i_receiver/down/flit
 add wave -noupdate /tb_top/rvtop/swerv/exu/i_mul_wrapper/i_receiver/down/enable
 add wave -noupdate /tb_top/rvtop/swerv/exu/i_mul_wrapper/i_receiver/down/ack
-add wave -noupdate -divider {Div Wrapper > Sender}
-add wave -noupdate /tb_top/rvtop/swerv/exu/i_div_wrapper/i_sender/flush
-add wave -noupdate /tb_top/rvtop/swerv/exu/i_div_wrapper/i_sender/ack
-add wave -noupdate /tb_top/rvtop/swerv/exu/i_div_wrapper/i_sender/cnt
-add wave -noupdate /tb_top/rvtop/swerv/exu/i_div_wrapper/i_sender/enable
-add wave -noupdate /tb_top/rvtop/swerv/exu/i_div_wrapper/i_sender/state
-add wave -noupdate /tb_top/rvtop/swerv/exu/i_div_wrapper/i_sender/nextstate
-add wave -noupdate /tb_top/rvtop/swerv/exu/i_div_wrapper/i_sender/dst_addr
-add wave -noupdate /tb_top/rvtop/swerv/exu/i_div_wrapper/i_sender/padding
-add wave -noupdate /tb_top/rvtop/swerv/exu/i_div_wrapper/i_sender/packet
+add wave -noupdate /tb_top/rvtop/swerv/exu/i_mul_wrapper/i_receiver/valid
+add wave -noupdate -divider {Mul Wrapper > Sender}
+add wave -noupdate /tb_top/rvtop/swerv/exu/i_mul_wrapper/i_sender/enable
+add wave -noupdate /tb_top/rvtop/swerv/exu/i_mul_wrapper/i_sender/ack
+add wave -noupdate /tb_top/rvtop/swerv/exu/i_mul_wrapper/i_sender/cnt
+add wave -noupdate /tb_top/rvtop/swerv/exu/i_mul_wrapper/i_sender/state
+add wave -noupdate /tb_top/rvtop/swerv/exu/i_mul_wrapper/i_sender/nextstate
+add wave -noupdate /tb_top/rvtop/swerv/exu/i_mul_wrapper/i_sender/dst_addr
+add wave -noupdate /tb_top/rvtop/swerv/exu/i_mul_wrapper/i_sender/padding
+add wave -noupdate /tb_top/rvtop/swerv/exu/i_mul_wrapper/i_sender/packet
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {1570140 ps} 0}
+WaveRestoreCursors {{Cursor 1} {1509247 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -62,4 +62,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {1442321 ps} {1587247 ps}
+WaveRestoreZoom {1495390 ps} {1584453 ps}
