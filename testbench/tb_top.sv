@@ -378,7 +378,7 @@ module tb_top ( input bit core_clk, input bit noc_clk );
     end
 
 `ifndef VERILATOR
-    always #(5.0/32.0) noc_clk = ~noc_clk;
+    always #(5.0/16.0) noc_clk = ~noc_clk;
 `endif
 
     initial begin    
